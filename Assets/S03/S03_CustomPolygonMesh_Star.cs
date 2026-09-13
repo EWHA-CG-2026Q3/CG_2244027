@@ -10,6 +10,7 @@ public class S03_CustomPolygonMesh_Star : MonoBehaviour
     [Min(0.1f)] public float outerRadius = 2.4f;
     [Min(0.1f)] public float innerRadius = 1.15f;
 
+    [SerializeField, HideInInspector]
     private Mesh generatedMesh;
 
     private void OnEnable()

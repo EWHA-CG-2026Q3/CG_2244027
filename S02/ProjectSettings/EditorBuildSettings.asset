@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/S02/Scenes/S02_Chair_Final.unity
+    guid: b3eb7b152c3e34bf3acc413d66a8d8ad
   m_configObjects: {}

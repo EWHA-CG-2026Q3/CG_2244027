@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/S03/Scenes/S03_CustomPolygon_Star.unity
+    guid: e7f47f920d74c418194bda2022f315c7
   m_configObjects: {}

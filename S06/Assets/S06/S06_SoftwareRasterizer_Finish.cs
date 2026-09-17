@@ -1,108 +1,116 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
-/// Draws an asymmetrical triangle by testing every pixel against its three edges.
-/// The vertices use normalized coordinates, with (0, 0) at the bottom-left.
+/// Lecture-style software rasterizer: visit each texel, decide whether its
+/// center lies inside the triangle, and display the result in a RawImage.
 /// </summary>
 [ExecuteAlways]
+[RequireComponent(typeof(RawImage))]
 public class S06_SoftwareRasterizer_Finish : MonoBehaviour
 {
-    private const int TextureWidth = 960;
-    private const int TextureHeight = 540;
+    [SerializeField] private int canvasWidth = 256;
+    [SerializeField] private int canvasHeight = 256;
 
-    // Deliberately unequal edges: this is not the template's regular triangle.
-    private static readonly Vector2 VertexA = new Vector2(0.14f, 0.18f);
-    private static readonly Vector2 VertexB = new Vector2(0.87f, 0.32f);
-    private static readonly Vector2 VertexC = new Vector2(0.58f, 0.88f);
+    // Changed from the lecture's A(128,200), B(60,60), C(200,60).
+    // All three edges now have different lengths and the base is tilted.
+    [SerializeField] private Vector2 vertexA = new Vector2(29f, 50f);
+    [SerializeField] private Vector2 vertexB = new Vector2(222f, 77f);
+    [SerializeField] private Vector2 vertexC = new Vector2(148f, 226f);
 
-    private static readonly Color ColorA = new Color(1.00f, 0.28f, 0.38f);
-    private static readonly Color ColorB = new Color(0.10f, 0.86f, 0.78f);
-    private static readonly Color ColorC = new Color(0.43f, 0.42f, 1.00f);
-    private static readonly Color Background = new Color(0.025f, 0.035f, 0.075f);
+    // Changed from the lecture's orange fill.
+    [SerializeField] private Color fillColor = new Color(1f, 0.27f, 0.40f, 1f);
+    [SerializeField] private Color backgroundColor = new Color(0.025f, 0.035f, 0.075f, 1f);
 
-    private Texture2D rasterizedImage;
+    private Texture2D canvasTexture;
 
     private void OnEnable()
     {
-        Rasterize();
+        DrawCanvas();
     }
 
     private void OnDisable()
     {
-        if (rasterizedImage != null)
+        if (canvasTexture != null)
         {
-            DestroyImmediate(rasterizedImage);
-            rasterizedImage = null;
+            DestroyImmediate(canvasTexture);
+            canvasTexture = null;
         }
     }
 
-    private void OnGUI()
+    private void DrawCanvas()
     {
-        if (rasterizedImage == null)
+        RawImage targetImage = GetComponent<RawImage>();
+        if (targetImage == null)
         {
-            Rasterize();
+            return;
         }
 
-        if (rasterizedImage != null)
+        if (canvasTexture != null)
         {
-            GUI.DrawTexture(
-                new Rect(0f, 0f, Screen.width, Screen.height),
-                rasterizedImage,
-                ScaleMode.StretchToFill
-            );
-        }
-    }
-
-    private void Rasterize()
-    {
-        if (rasterizedImage != null)
-        {
-            DestroyImmediate(rasterizedImage);
+            DestroyImmediate(canvasTexture);
         }
 
-        rasterizedImage = new Texture2D(
-            TextureWidth,
-            TextureHeight,
-            TextureFormat.RGBA32,
-            false
-        )
+        canvasTexture = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false)
         {
-            name = "S06_CPU_Rasterized_Triangle",
-            filterMode = FilterMode.Bilinear,
+            name = "S06_Barycentric_Pixel_Canvas",
+            filterMode = FilterMode.Point,
             wrapMode = TextureWrapMode.Clamp,
             hideFlags = HideFlags.HideAndDontSave
         };
 
-        Color[] pixels = new Color[TextureWidth * TextureHeight];
-        float totalArea = Edge(VertexA, VertexB, VertexC);
-
-        for (int y = 0; y < TextureHeight; y++)
-        {
-            for (int x = 0; x < TextureWidth; x++)
-            {
-                Vector2 point = new Vector2(
-                    (x + 0.5f) / TextureWidth,
-                    (y + 0.5f) / TextureHeight
-                );
-
-                float weightA = Edge(VertexB, VertexC, point) / totalArea;
-                float weightB = Edge(VertexC, VertexA, point) / totalArea;
-                float weightC = Edge(VertexA, VertexB, point) / totalArea;
-
-                bool isInside = weightA >= 0f && weightB >= 0f && weightC >= 0f;
-                pixels[y * TextureWidth + x] = isInside
-                    ? weightA * ColorA + weightB * ColorB + weightC * ColorC
-                    : Background;
-            }
-        }
-
-        rasterizedImage.SetPixels(pixels);
-        rasterizedImage.Apply(false, false);
+        FillBackground(backgroundColor);
+        DrawTriangle(vertexA, vertexB, vertexC, fillColor);
+        canvasTexture.Apply(false, false);
+        targetImage.texture = canvasTexture;
     }
 
-    private static float Edge(Vector2 start, Vector2 end, Vector2 point)
+    private void FillBackground(Color color)
     {
-        return (end.x - start.x) * (point.y - start.y)
-             - (end.y - start.y) * (point.x - start.x);
+        for (int x = 0; x < canvasWidth; x++)
+        {
+            for (int y = 0; y < canvasHeight; y++)
+            {
+                canvasTexture.SetPixel(x, y, color);
+            }
+        }
+    }
+
+    private void DrawTriangle(Vector2 a, Vector2 b, Vector2 c, Color color)
+    {
+        for (int x = 0; x < canvasWidth; x++)
+        {
+            for (int y = 0; y < canvasHeight; y++)
+            {
+                Vector2 pixelCenter = new Vector2(x + 0.5f, y + 0.5f);
+                if (IsInsideTriangle(pixelCenter, a, b, c))
+                {
+                    canvasTexture.SetPixel(x, y, color);
+                }
+            }
+        }
+    }
+
+    private static bool IsInsideTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+    {
+        float denom = a.x * (b.y - c.y)
+                    + b.x * (c.y - a.y)
+                    + c.x * (a.y - b.y);
+
+        if (Mathf.Approximately(denom, 0f))
+        {
+            return false;
+        }
+
+        float w1 = (p.x * (b.y - c.y)
+                  + b.x * (c.y - p.y)
+                  + c.x * (p.y - b.y)) / denom;
+
+        float w2 = (a.x * (p.y - c.y)
+                  + p.x * (c.y - a.y)
+                  + c.x * (a.y - p.y)) / denom;
+
+        float w3 = 1f - w1 - w2;
+        return w1 >= 0f && w2 >= 0f && w3 >= 0f;
     }
 }

@@ -1,13 +1,18 @@
 using UnityEngine;
 
 /// <summary>
-/// Draws the same triangle using Unity's GL immediate-mode API.
+/// Draws a triangle using Unity's GL immediate-mode API.
 /// Attach this component to the camera that renders the Game view.
 /// </summary>
 [ExecuteAlways]
 [RequireComponent(typeof(Camera))]
 public class S06_GLImmediateTriangle : MonoBehaviour
 {
+    [SerializeField] private Vector3 vertexA = new Vector3(0.113f, 0.195f, 0f);
+    [SerializeField] private Vector3 vertexB = new Vector3(0.867f, 0.301f, 0f);
+    [SerializeField] private Vector3 vertexC = new Vector3(0.578f, 0.883f, 0f);
+    [SerializeField] private Color triangleColor = new Color(0.16f, 0.83f, 1f, 1f);
+
     private Material glMaterial;
 
     private void OnEnable()
@@ -36,16 +41,10 @@ public class S06_GLImmediateTriangle : MonoBehaviour
         GL.PushMatrix();
         GL.LoadOrtho();
         GL.Begin(GL.TRIANGLES);
-
-        GL.Color(new Color(1.00f, 0.28f, 0.38f));
-        GL.Vertex3(0.14f, 0.18f, 0f);
-
-        GL.Color(new Color(0.10f, 0.86f, 0.78f));
-        GL.Vertex3(0.87f, 0.32f, 0f);
-
-        GL.Color(new Color(0.43f, 0.42f, 1.00f));
-        GL.Vertex3(0.58f, 0.88f, 0f);
-
+        GL.Color(triangleColor);
+        GL.Vertex3(vertexA.x, vertexA.y, vertexA.z);
+        GL.Vertex3(vertexB.x, vertexB.y, vertexB.z);
+        GL.Vertex3(vertexC.x, vertexC.y, vertexC.z);
         GL.End();
         GL.PopMatrix();
     }

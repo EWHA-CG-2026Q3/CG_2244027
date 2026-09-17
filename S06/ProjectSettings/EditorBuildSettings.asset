@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/S06/Scenes/S06_PixelRasterizer.unity
+    guid: 3c117c65219e74caaa0576decebec6f6
+  - enabled: 1
+    path: Assets/S06/Scenes/S06_GLImmediateMode.unity
+    guid: 5b6a74d286a784a40966de5a83908deb
   m_configObjects: {}

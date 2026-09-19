@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/S04/Scenes/S04_CustomDiamond.unity
+    guid: 6659fc5f8859e4df999d6122a151292f
   m_configObjects: {}

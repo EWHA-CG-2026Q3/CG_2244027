@@ -19,8 +19,14 @@ public class S07_DepthTest2 : MonoBehaviour
     private static readonly Vector3 CyanB = new Vector3(220f, 212f, 0.10f);
     private static readonly Vector3 CyanC = new Vector3(138f, 24f, 0.50f);
 
+    // A third, separate triangle keeps the template's three-draw exercise visible.
+    private static readonly Vector3 GoldA = new Vector3(194f, 14f, 0.45f);
+    private static readonly Vector3 GoldB = new Vector3(244f, 26f, 0.45f);
+    private static readonly Vector3 GoldC = new Vector3(217f, 61f, 0.45f);
+
     private static readonly Color Pink = new Color(1f, 0.26f, 0.42f, 1f);
     private static readonly Color Cyan = new Color(0.12f, 0.83f, 1f, 1f);
+    private static readonly Color Gold = new Color(0.91f, 0.79f, 0.25f, 1f);
     private Texture2D canvas;
 
     private void OnEnable() { Render(); }
@@ -48,8 +54,10 @@ public class S07_DepthTest2 : MonoBehaviour
         for (int y = 0; y < CanvasSize; y++)
             for (int x = 0; x < CanvasSize; x++) canvas.SetPixel(x, y, Background);
 
-        DrawTriangle(PinkA, PinkB, PinkC, Pink, depth);
+        // TODO 0: deliberately change the three-draw order; depth wins over call order.
+        DrawTriangle(GoldA, GoldB, GoldC, Gold, depth);
         DrawTriangle(CyanA, CyanB, CyanC, Cyan, depth);
+        DrawTriangle(PinkA, PinkB, PinkC, Pink, depth);
         canvas.Apply(false, false);
         GetComponent<RawImage>().texture = canvas;
     }

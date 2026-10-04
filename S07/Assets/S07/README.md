@@ -2,7 +2,7 @@
 
 Unity Hub에서 저장소의 `S07` 폴더를 독립 프로젝트로 열고 Unity 6.6 (`6000.6.0f1`)으로 실행하세요.
 
-- `Scenes/S07_DepthTest.unity`: 두 삼각형의 z를 보간하고 깊이 버퍼를 검사합니다.
+- `Scenes/S07_DepthTest.unity`: 겹치는 두 삼각형의 z를 보간해 깊이 버퍼를 검사하고, 세 번째 보조 삼각형까지 순서를 바꿔 그립니다.
 - `Scenes/S07_Clipping.unity`: 회색 창의 네 경계에 다각형을 순차적으로 클리핑합니다.
 - `DesignRationale.md`: 각 좌표를 그렇게 정한 이유를 한 줄씩 적었습니다.
 - `Answer.md`: 서술형 4문장입니다.

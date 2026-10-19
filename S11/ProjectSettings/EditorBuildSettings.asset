@@ -1,0 +1,14 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/S11/Scenes/S11_VirtualCamera_Finish.unity
+    guid: 13f53552d780d4c369643043e12ea83b
+  - enabled: 1
+    path: Assets/S11/Scenes/S11_DiamondView.unity
+    guid: 6d0b7ca94acb444908245eb6d8259ca9
+  m_configObjects: {}

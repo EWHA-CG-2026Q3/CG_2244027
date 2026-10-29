@@ -15,6 +15,7 @@ public sealed class S14CinematicTour : MonoBehaviour
 
     private Vector3 center;
     private float startTime;
+    private SceneWalker walker;
 
     private void Start()
     {
@@ -24,6 +25,8 @@ public sealed class S14CinematicTour : MonoBehaviour
         Bounds bounds = renderers[0].bounds;
         foreach (Renderer renderer in renderers) bounds.Encapsulate(renderer.bounds);
         center = bounds.center;
+        walker = GetComponent<SceneWalker>();
+        walker.BeginGuidedTour(new Vector3(center.x + Stops[0].x, Stops[0].y, center.z + Stops[0].z));
         startTime = Time.time;
     }
 
@@ -34,8 +37,8 @@ public sealed class S14CinematicTour : MonoBehaviour
         int segment = Mathf.Min(Mathf.FloorToInt(position), Stops.Length - 2);
         float blend = Mathf.SmoothStep(0f, 1f, position - segment);
         Vector3 location = Vector3.Lerp(Stops[segment], Stops[segment + 1], blend);
-        transform.position = new Vector3(center.x + location.x, location.y, center.z + location.z);
+        Vector3 cameraPosition = new Vector3(center.x + location.x, location.y, center.z + location.z);
         Vector3 lookAt = center + new Vector3(0f, 0.15f, 2.2f);
-        transform.rotation = Quaternion.LookRotation(lookAt - transform.position, Vector3.up);
+        walker.MoveGuidedTour(cameraPosition, lookAt);
     }
 }

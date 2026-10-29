@@ -17,6 +17,7 @@ public class SceneWalker : MonoBehaviour
     CharacterController controller;
     float pitch;          // 위아래로 고개를 든 각도
     float verticalSpeed;  // 떨어지는 속도
+    bool guidedTour;
 
     void Start()
     {
@@ -26,6 +27,7 @@ public class SceneWalker : MonoBehaviour
 
     void Update()
     {
+        if (guidedTour) return;
         Keyboard kb = Keyboard.current;
         Mouse mouse = Mouse.current;
         if (kb == null || mouse == null) return;
@@ -64,5 +66,24 @@ public class SceneWalker : MonoBehaviour
         move.y = verticalSpeed;
 
         controller.Move(move * Time.deltaTime);
+    }
+
+    // The recorded tour moves the same CharacterController used for manual walking.
+    public void BeginGuidedTour(Vector3 cameraStart)
+    {
+        if (controller == null) controller = GetComponent<CharacterController>();
+        if (cameraTransform == null) cameraTransform = GetComponentInChildren<Camera>().transform;
+        guidedTour = true;
+        controller.enabled = false;
+        transform.position = cameraStart - cameraTransform.localPosition;
+        controller.enabled = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void MoveGuidedTour(Vector3 cameraDestination, Vector3 lookAt)
+    {
+        Vector3 walkerDestination = cameraDestination - cameraTransform.localPosition;
+        controller.Move(walkerDestination - transform.position);
+        cameraTransform.rotation = Quaternion.LookRotation(lookAt - cameraTransform.position, Vector3.up);
     }
 }

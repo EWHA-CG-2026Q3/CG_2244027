@@ -47,8 +47,9 @@ public static class S14VideoCapture
         if (walker == null || camera == null)
             throw new InvalidOperationException("S14 SceneWalker or Main Camera is missing.");
 
-        walker.GetComponent<SceneWalker>().enabled = false;
-        camera.gameObject.AddComponent<S14CinematicTour>();
+        if (walker.GetComponent<SceneWalker>() == null || !camera.transform.IsChildOf(walker.transform))
+            throw new InvalidOperationException("The active camera must belong to SceneWalker.");
+        walker.AddComponent<S14CinematicTour>();
 
         string directory = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Recordings"));
         Directory.CreateDirectory(directory);
@@ -72,7 +73,7 @@ public static class S14VideoCapture
             OutputWidth = 1280,
             OutputHeight = 720
         };
-        movie.OutputFile = Path.Combine(directory, "S14_GameView_40s");
+        movie.OutputFile = Path.Combine(directory, "S14_GameView_40s_Walker");
         settings.AddRecorderSettings(movie);
 
         RecorderController recorder = new RecorderController(settings);

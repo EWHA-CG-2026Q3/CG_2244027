@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Mid/Scenes/Mid_PlushAudience.unity
+    guid: 4dba0f35d80ac4776a80d8e3af906bcf
+  - enabled: 1
+    path: Assets/Mid/Scenes/Mid_ChiikawaAudience.unity
+    guid: 9990e9b43cacc4eea80e1dc151e80e49
+  - enabled: 1
+    path: Assets/Mid/Scenes/Mid_ChiikawaModeled.unity
+    guid: ce69f028459d54a8f830e36a3eea52b1
+  - enabled: 1
+    path: Assets/Mid/Scenes/Mid_ChiikawaUsagiAudience.unity
+    guid: fc376894a197b4b6cb7fcc9f4ea4c237
+  - enabled: 1
+    path: Assets/Mid/Scenes/Mid_ThreeSculptAudience.unity
+    guid: 4326829afde8b4c5280c6bb8509478b8
+  - enabled: 1
+    path: Assets/Mid/Scenes/Mid_FiveFriendsAudience.unity
+    guid: 367473138cf4d40f6a8b958b334fe60f
+  - enabled: 1
+    path: Assets/Mid/Scenes/Mid_SixFriendsAudience.unity
+    guid: 2ab22b49e0bf648d48aa0d6a0355758a
+  - enabled: 1
+    path: Assets/Mid/Scenes/Mid_SevenFriendsAudience.unity
+    guid: 19dfb833938884ee08e451ffa69f22a2
+  - enabled: 1
+    path: Assets/Mid/Scenes/Mid_EightFriendsAudience.unity
+    guid: 42ce60574611140809129494451b0d8d
+  m_configObjects: {}
